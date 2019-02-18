@@ -111,11 +111,11 @@ class Blockchain {
             .then(persistedBlock => {
                 //7
                 // console.log(`\nBlock persisted to the levelDB Blockchain: ${persistedBlock}\n`);
-                return new Promise (resolve => resolve(persistedBlock)).catch(console.log);
+                return new Promise (resolve => resolve(persistedBlock)).catch(err => console.log(`Error: ${err}`));
             })
             .catch(err => {
                 //8
-                return new Promise((resolve, reject) => reject(err)).catch(console.log);
+                return new Promise((resolve, reject) => reject(err)).catch(err => console.log(`Error: ${err}`));
             });
 
 

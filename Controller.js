@@ -1,6 +1,6 @@
-
 // const {LevelSandbox} = require('./LevelSandbox');
 const {Blockchain} = require('./BlockChain');
+const {Block} = require('./Block');
 
 class Controller {
 
@@ -15,7 +15,7 @@ class Controller {
     }
 
     async getBlock() {
-        this.app.get('/api/block/:height', async (req,res) => {
+        return this.app.get('/api/block/:height', async (req,res) => {
             //query the levelDB blockchain database for the block
 
             //grab the queryString param "height"
@@ -24,7 +24,8 @@ class Controller {
             //make a call to levelDB via LevelSandbox using the height
             const block = await this.db.getBlock(height)
                 .then(block => {
-                    res.send(block)
+                    res.send(block);
+
                 })
                 .catch(err => {
                     res.send(err);
@@ -36,7 +37,31 @@ class Controller {
     }
 
     postBlock() {
+        return this.app.post('/api/block', async (req,res) => {
 
+            //grab the data from the POST body
+            const data = req.body.data;
+
+            //create the new block
+            let newBlock = new Block(data);
+
+            await this.db
+                .addBlock(newBlock)
+                .then(persistedBlock => {
+                    res.send(persistedBlock);
+                    res.end();
+                })
+                .catch(err => {
+                    res.send(err);
+                    res.end();
+                });
+
+
+
+
+
+
+        });
     }
 
 
